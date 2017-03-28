@@ -7,7 +7,7 @@
     "build": "grunt",
     "start": "grunt start"
   },
-  "author": "Hannes Moser <hannes@impossiblearts.com>",
+  "author": "Marcel Freinbichler <marcel@freinbichler.me>",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.18.0",
