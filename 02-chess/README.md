@@ -1,4 +1,4 @@
-# 04-chess
+# 02-chess
 
 > When you see a good move, look for a better one
 
@@ -49,7 +49,7 @@ Consume events or emit commands to create a game.
     move: <move in SAN notation>
   }
   ```
-  
+
 * `socket.emit('restart')`
 * `socket.emit('undo')`
 
