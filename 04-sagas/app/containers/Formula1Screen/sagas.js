@@ -5,19 +5,23 @@ import {
   LOAD_CONSTRUCTORS,
   LOAD_CONSTRUCTORS_SUCCESS,
   LOAD_CONSTRUCTORS_ERROR,
+  LOAD_DRIVERS,
+  LOAD_DRIVERS_SUCCESS,
+  LOAD_DRIVERS_ERROR,
 } from './constants';
 import {
   loadConstructors,
   loadConstructorsSuccess,
   loadConstructorsError,
+  loadDrivers,
+  loadDriversSuccess,
+  loadDriversError,
 } from './actions';
 import {
   selectConstructorsCount,
 } from './selectors';
 
-// Individual exports for testing
 export function* getConstructors(action) {
-  // See example in containers/HomePage/sagas.js
   const API_URL = `http://ergast.com/api/f1/constructors.json?limit=50&offset=${action.offset}`;
   try {
     const response = yield call(request, API_URL);
@@ -41,7 +45,26 @@ export function* watchConstructorsAction() {
   yield cancel(watcher);
 }
 
+export function* getDrivers(action) {
+  const API_URL = `http://ergast.com/api/f1/constructors/${action.constructorId}/drivers.json?limit=10000`;
+  try {
+    const response = yield call(request, API_URL);
+    const drivers = response.MRData.DriverTable.Drivers;
+    yield put(loadDriversSuccess(drivers));
+  } catch (error) {
+    yield put(loadDriversError(error));
+  }
+}
+
+export function* watchDriversAction() {
+  const watcher = yield throttle(100, LOAD_DRIVERS, getDrivers);
+
+  yield take(LOCATION_CHANGE);
+  yield cancel(watcher);
+}
+
 // All sagas to be loaded
 export default [
   watchConstructorsAction,
+  watchDriversAction,
 ];

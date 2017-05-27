@@ -19,19 +19,13 @@ const selectConstructorsCount = createSelector(
   (constructors) => (constructors ? constructors.length : 0),
 );
 
+const selectDrivers = () => createSelector(
+  selectFormula1ScreenDomain,
+  (state) => state.get('drivers')
+);
 
-/**
- * Default selector used by Formula1Screen
- */
-
-// const makeSelectFormula1Screen = () => createSelector(
-//   selectFormula1ScreenDomain(),
-//   (substate) => substate.toJS()
-// );
-
-// export default makeSelectFormula1Screen;
 export {
-  // selectFormula1ScreenDomain,
   selectConstructors,
   selectConstructorsCount,
+  selectDrivers,
 };

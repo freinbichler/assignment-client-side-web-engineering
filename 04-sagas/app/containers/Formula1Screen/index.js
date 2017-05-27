@@ -8,8 +8,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Autocomplete from 'react-autocomplete';
-import { loadConstructors } from './actions';
-import { selectConstructors } from './selectors';
+import { loadConstructors, loadDrivers } from './actions';
+import { selectConstructors, selectDrivers } from './selectors';
 
 export class Formula1Screen extends React.Component { // eslint-disable-line react/prefer-stateless-function
   state = {
@@ -26,6 +26,16 @@ export class Formula1Screen extends React.Component { // eslint-disable-line rea
 
   render() {
     const items = this.props.constructors || [{ constructorId: 'lulu', name: 'loading'}];
+
+    let driversList = '';
+    if(this.props.drivers) {
+      driversList = this.props.drivers.map((driver) =>
+        <li key={driver.driverId}>
+          <a href={driver.url} target="_blank">{driver.givenName} {driver.familyName}</a>
+        </li>
+      );
+    }
+
     return (
       <div>
         <h1>Formula 1</h1>
@@ -44,10 +54,8 @@ export class Formula1Screen extends React.Component { // eslint-disable-line rea
           getItemValue={(item) => item.name}
           shouldItemRender={this.matchStateToTerm}
           onSelect={(value, item) => {
-           // set the menu to only the selected item
-            // this.setState({ value });
-           // or you could reset it to a default list again
-           // this.setState({ unitedStates: getStates() })
+            this.setState({ value });
+            this.props.sendLoadDrivers(item.constructorId);
           }}
           onChange={(event, value) => {
             this.setState({ value });
@@ -59,6 +67,10 @@ export class Formula1Screen extends React.Component { // eslint-disable-line rea
             >{item.name}</div>
          )}
         />
+      <h2>Drivers:</h2>
+        <ul>
+          {driversList}
+        </ul>
       </div>
     );
   }
@@ -66,20 +78,26 @@ export class Formula1Screen extends React.Component { // eslint-disable-line rea
 
 Formula1Screen.propTypes = {
   sendLoadConstructors: PropTypes.func.isRequired,
+  sendLoadDrivers: PropTypes.func.isRequired,
 };
 
 Formula1Screen.defaultProp = {
   constructors: ['loading...'],
+  drivers: [],
 };
 
 const mapStateToProps = createStructuredSelector({
   constructors: selectConstructors(),
+  drivers: selectDrivers(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     sendLoadConstructors: () => {
       dispatch(loadConstructors());
+    },
+    sendLoadDrivers: (constructorId) => {
+      dispatch(loadDrivers(constructorId));
     },
   };
 }
