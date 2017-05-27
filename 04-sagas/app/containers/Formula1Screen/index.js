@@ -25,8 +25,6 @@ export class Formula1Screen extends React.Component { // eslint-disable-line rea
   }
 
   render() {
-    const items = this.props.constructors || [{ constructorId: 'lulu', name: 'loading'}];
-
     let driversList = '';
     if(this.props.drivers) {
       driversList = this.props.drivers.map((driver) =>
@@ -50,7 +48,7 @@ export class Formula1Screen extends React.Component { // eslint-disable-line rea
           }}
           ref={(a) => (this.autocomplete = a)}
           value={this.state.value}
-          items={items}
+          items={this.props.constructors}
           getItemValue={(item) => item.name}
           shouldItemRender={this.matchStateToTerm}
           onSelect={(value, item) => {
@@ -82,7 +80,7 @@ Formula1Screen.propTypes = {
 };
 
 Formula1Screen.defaultProp = {
-  constructors: ['loading...'],
+  constructors: [],
   drivers: [],
 };
 
