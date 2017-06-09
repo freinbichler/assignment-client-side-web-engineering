@@ -20,6 +20,14 @@ export default class Store {
 	 *	 // data shall contain items whose completed properties are true
 	 * })
      */
+
+    constructor() {
+        localDB.sync(remoteDB, {
+            live: true,
+            retry: true,
+        })
+    }
+
     find(query, callback) {
         localDB.allDocs({
             include_docs: true,
